@@ -7,25 +7,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
-  serverElements = [
-    {
-      type: 'server',
-      name: 'SR1',
-      content: 'Just a test!'
-    }
-  ];
+  // numbers = [1, 2, 3, 4, 5];
+  odds = [1, 3, 5];
+  evens = [2, 4, 6];
+  onlyOdd = false;
+  item = 100;
 
-  onServerAdded = (serverData: { serverName: string, serverContent: string}) => 
-    this.serverElements.push({
-      type: 'server',
-      name: serverData.serverName,
-      content: serverData.serverContent
-    });
-
-  onBlueprintAdded = (blueprintData: { serverName: string, serverContent: string}) =>
-    this.serverElements.push({
-      type: 'blueprint',
-      name: blueprintData.serverName,
-      content: blueprintData.serverContent
-    });
 }

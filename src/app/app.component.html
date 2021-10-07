@@ -1,9 +1,37 @@
 <div class="container">
-  <app-cockpit (serverCreated)="onServerAdded($event)" (bluePrintCreated)="onBlueprintAdded($event)"></app-cockpit>
-  <hr>
   <div class="row">
-    <div class="col-xs-12">
-      <app-server-element *ngFor="let item of serverElements" [element]="item"></app-server-element>
+    <div class="cpl-xs-12">
+      <button class="btn btn-primary" (click)="onlyOdd = !onlyOdd">Toggle numbers</button>
+      <br><br>
+      <ul class="list-group">
+        <div *ngIf="onlyOdd">
+          <li class="list-group-item" 
+            *ngFor="let odd of odds"
+            [ngClass]="{ 'odd-number': odd %2 !== 0 }"
+            [ngStyle]="{ background: odd %2 !== 0 ? 'red' : '' }">
+            {{ odd }}
+          </li>
+        </div>
+        <div *ngIf="!onlyOdd">
+          <li class="list-group-item" 
+          *ngFor="let even of evens"
+          [ngClass]="{ 'odd-number': even %2 !== 0 }"
+          [ngStyle]="{ background: even %2 !== 0 ? 'red' : '' }">
+            {{ even }}
+          </li>
+        </div>
+      </ul>
+      <p appBasicHighlight><strong>Checking Basic Directive</strong> - Lorem ipsum dolor sit amet consectetur adipisicing elit. Id explicabo at, placeat esse aut et corporis ratione autem nam enim ducimus odio nemo dolores deleniti inventore mollitia adipisci sunt corrupti ipsam eveniet quae.</p>
+      <p appBestDirective><strong>Checking Best Directive</strong> - Lorem ipsum dolor sit amet consectetur adipisicing elit. Id explicabo at, placeat esse aut et corporis ratione autem nam enim ducimus odio nemo dolores deleniti inventore mollitia adipisci sunt corrupti ipsam eveniet quae.</p>
+      <div [ngSwitch]="item">
+        <h3 *ngSwitchCase="5">Item is 5</h3>
+        <h3 *ngSwitchCase="10">Item is 10</h3>
+        <h3 *ngSwitchCase="100">Item is 100</h3>
+        <h3 *ngSwitchDefault>Item is Default</h3>
+      </div>
+      <!-- <ng-template [ngIf]="onlyOdd">
+        <p>Only Odd</p>
+      </ng-template> -->
     </div>
   </div>
 </div>
