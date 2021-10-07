@@ -3,20 +3,22 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BasicHighlightDirective } from './directives/basic-highlight.directive';
-import { BestDirectiveDirective } from './directives/best-directive.directive';
+import { NewAccountComponent } from './components/new-account/new-account.component';
+import { AccountComponent } from './components/account/account.component';
+import { LoggingService } from './services/logging.service';
+import { AccountService } from './services/account.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    BasicHighlightDirective,
-    BestDirectiveDirective,
+    NewAccountComponent,
+    AccountComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
   ],
-  providers: [],
+  providers: [LoggingService, AccountService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

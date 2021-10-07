@@ -1,16 +1,20 @@
 import { Component } from '@angular/core';
+import { AccountService } from './services/account.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  providers: [AccountService]
 })
 export class AppComponent {
 
-  // numbers = [1, 2, 3, 4, 5];
-  odds = [1, 3, 5];
-  evens = [2, 4, 6];
-  onlyOdd = false;
-  item = 100;
+  accounts: { name: string, status: string }[] = [];
+
+  constructor(private accountService: AccountService) {}
+
+  ngOnInit() {
+    this.accounts = this.accountService.accounts;
+  }
 
 }
