@@ -1,10 +1,9 @@
 <div class="container">
-  <div class="row mt-4">
+  <app-cockpit (serverCreated)="onServerAdded($event)" (bluePrintCreated)="onBlueprintAdded($event)"></app-cockpit>
+  <hr>
+  <div class="row">
     <div class="col-xs-12">
-      <h1 class="alert alert-success">Victor Smirnov</h1>
-      <div class="alert alert-primary">
-        <app-servers></app-servers>
-      </div>
+      <app-server-element *ngFor="let item of serverElements" [element]="item"></app-server-element>
     </div>
   </div>
 </div>
