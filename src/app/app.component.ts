@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { map } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 import { Post } from './models/post.model';
+import { PostsService } from './service/posts.service';
 
 @Component({
   selector: 'app-root',
@@ -13,32 +12,40 @@ export class AppComponent implements OnInit {
 
   loadedPosts: Post[] = [];
   isFetching = false;
+  error = null;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private postsService: PostsService) {
   }
 
   ngOnInit() {
-    this.fetcPosts();
+    this.postsService.fetcPosts().subscribe(posts => {
+      this.isFetching = false;
+      this.loadedPosts = posts;
+    }, error => {
+      this.isFetching = false;
+      this.error = error.message;
+      console.log(error);
+    });
   }
 
-  onCreatePost = (postData: Post) => this.http.post<{ name: string }>(environment.dbUrl, postData).subscribe(res => console.log(res));
+  onCreatePost = (postData: Post) => this.postsService.createAndStorePost(postData.title, postData.content);
 
   onFetchPosts = () => this.fetcPosts();
 
-  onClearPosts = () => {};
+  onClearPosts = () => this.postsService.deletePosts().subscribe(() => this.loadedPosts = []);
+
+  onHandleError = () => this.error = null;
 
   private fetcPosts = () => {
     this.isFetching = true;
-    this.http.get<{ [key: string]: Post }>(environment.dbUrl).pipe(map((res: any) => {
-    const posts: Post[] = [];
-    for (const key in res) {
-      posts.push({ ...res[key], id: key });
-    }
-    return posts;
-  })).subscribe(posts => {
-    this.isFetching = false;
-    this.loadedPosts = posts;
-  });
-};
+    this.postsService.fetcPosts().subscribe(posts => {
+      this.isFetching = false;
+      this.loadedPosts = posts;
+    }, error => {
+      this.isFetching = false;
+      this.error = error.message;
+      console.log(error);
+    });
+  };
 
 }
