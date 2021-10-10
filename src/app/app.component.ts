@@ -1,4 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+import { Post } from './models/post.model';
 
 @Component({
   selector: 'app-root',
@@ -7,47 +11,34 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit {
 
-  servers = [
-    {
-      name: 'Production Server',
-      status: 'stable',
-      instanceType: 'medium',
-      started: new Date(2021, 9, 10)
-    },
-    {
-      name: 'Development Server',
-      status: 'offline',
-      instanceType: 'small',
-      started: new Date(2021, 9, 10)
-    },
-    {
-      name: 'User Database',
-      status: 'stable',
-      instanceType: 'large',
-      started: new Date(2021, 9, 10)
-    },
-    {
-      name: 'Testing Environment Server',
-      status: 'stable',
-      instanceType: 'small',
-      started: new Date(2021, 9, 10)
-    },
-  ];
+  loadedPosts: Post[] = [];
+  isFetching = false;
 
-  filteredStatus = '';
-
-  constructor() {
+  constructor(private http: HttpClient) {
   }
 
   ngOnInit() {
+    this.fetcPosts();
   }
 
-  getStatusClasses = (server: { instanceType: string, name: string, status: string, started: Date }) => {
-    return {
-      'list-group-item-success': server.status === 'stable',
-      'list-group-item-warning': server.status === 'offline',
-      'list-group-item-danger': server.status === 'critical'
-    };
-  };
+  onCreatePost = (postData: Post) => this.http.post<{ name: string }>(environment.dbUrl, postData).subscribe(res => console.log(res));
+
+  onFetchPosts = () => this.fetcPosts();
+
+  onClearPosts = () => {};
+
+  private fetcPosts = () => {
+    this.isFetching = true;
+    this.http.get<{ [key: string]: Post }>(environment.dbUrl).pipe(map((res: any) => {
+    const posts: Post[] = [];
+    for (const key in res) {
+      posts.push({ ...res[key], id: key });
+    }
+    return posts;
+  })).subscribe(posts => {
+    this.isFetching = false;
+    this.loadedPosts = posts;
+  });
+};
 
 }
