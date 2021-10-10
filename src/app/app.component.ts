@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -8,29 +7,47 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class AppComponent implements OnInit {
 
-  genders = ['male', 'female'];
-  signupForm!: FormGroup;
+  servers = [
+    {
+      name: 'Production Server',
+      status: 'stable',
+      instanceType: 'medium',
+      started: new Date(2021, 9, 10)
+    },
+    {
+      name: 'Development Server',
+      status: 'offline',
+      instanceType: 'small',
+      started: new Date(2021, 9, 10)
+    },
+    {
+      name: 'User Database',
+      status: 'stable',
+      instanceType: 'large',
+      started: new Date(2021, 9, 10)
+    },
+    {
+      name: 'Testing Environment Server',
+      status: 'stable',
+      instanceType: 'small',
+      started: new Date(2021, 9, 10)
+    },
+  ];
 
-  constructor() {}
+  filteredStatus = '';
+
+  constructor() {
+  }
 
   ngOnInit() {
-    this.signupForm = new FormGroup({
-      'username': new FormControl(null, Validators.required),
-      'email': new FormControl(null, [Validators.required, Validators.email]),
-      'gender': new FormControl('male'),
-    });
-
-    this.signupForm.setValue({
-      'username': 'Superuser',
-      'email': 'victor@mail.me',
-      'gender': 'male'
-    });
-
   }
 
-  onSubmit() {
-    console.log(this.signupForm);
-    this.signupForm.reset();
-  }
+  getStatusClasses = (server: { instanceType: string, name: string, status: string, started: Date }) => {
+    return {
+      'list-group-item-success': server.status === 'stable',
+      'list-group-item-warning': server.status === 'offline',
+      'list-group-item-danger': server.status === 'critical'
+    };
+  };
 
 }
